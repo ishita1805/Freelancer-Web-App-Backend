@@ -7,7 +7,7 @@ const auth = require("../middleware/authentication")
 router.get("/getUser", userController.getUsers);
 router.post("/createUser", userController.createUser);
 router.post("/login", userController.login);
-router.post("/logout", auth, userController.logout);
+router.get("/logout", auth, userController.logout);
 router.post("/getPortfolio", auth, userController.getPortfolio);
 
 
