@@ -9,5 +9,6 @@ router.post("/getOneJob", auth, jobController.getOneJob);
 router.post("/applyJob", auth, jobController.applyJob);
 router.post("/deleteJob", auth, jobController.deleteJob);
 router.post("/hireJob", auth, jobController.hireJob);
+router.post("/ownerJobs", auth, jobController.ownerJobs);
 
 module.exports = router;

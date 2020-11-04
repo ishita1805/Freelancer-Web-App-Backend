@@ -144,3 +144,20 @@ exports.hireJob = (req, res, next) => {
   })
  
 }
+
+
+// find jobs by owner
+exports.ownerJobs = (req, res, next) => {
+  Job.find({owner:req.body.owner})
+  .then((data)=>{
+    res.status(201).json({
+      message:"List of jobs under owner found",
+      jobs: data
+    })
+    .catch(()=>{
+      res.status(500).json({
+        error:"Could not fetch list"
+      })
+    })
+  })
+}
