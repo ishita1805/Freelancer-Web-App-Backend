@@ -7,6 +7,8 @@ const morgan = require('morgan');
 const port =  process.env.PORT || 4000
 const fileUpload = require('express-fileupload')
 const bodyParser = require('body-parser')
+const fs = require('fs');
+const path = require("path");
 
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
@@ -22,7 +24,13 @@ const mongoose = require('mongoose')
 require('./src/db/mongoose.js')
 mongoose.set('useCreateIndex',true);
 
+const dir = path.join(__dirname, "tmp") ;
 
+// delete temp directory 
+fs.rmdir(dir, { recursive: true }, (err) => {
+    if (err) throw err;
+    console.log(`${dir} is deleted!`);
+});
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
