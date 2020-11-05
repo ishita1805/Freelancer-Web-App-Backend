@@ -41,8 +41,13 @@ jobSchema.virtual('applicants', {
   localField:'_id',
   foreignField:'jobsApplied',
   justOne:false
+})
+
+jobSchema.virtual('applicantsHired', {
+  ref:'User',
+  localField:'_id',
+  foreignField:'jobsHired',
+  justOne:false
 });
-
-
 
 module.exports = mongoose.model("Job", jobSchema);

@@ -67,6 +67,7 @@ exports.login = (req, res, next) => {
     return res.status(401).json({
       message:'User not found'
     });
+    console.log(data);
     bcrypt.compare(req.body.password, data.password, (err, result) => {
       if(!result)
       return res.status(401).json({
@@ -77,10 +78,9 @@ exports.login = (req, res, next) => {
       res.cookie("jwt", token, {
           httpOnly: true,
       }); 
-      res.cookie("role", data.role, {
-        httpOnly: true,
-      }); 
+      res.cookie("role", data.role); 
       res.cookie("isLogged", "true")
+      res.cookie("id", data._id.toString())
       res.status(200).json({
         message:"User logged in" 
       }) 
@@ -98,6 +98,7 @@ exports.logout =  (req, res, next) => {
   res.clearCookie('jwt')
   res.clearCookie('role')
   res.clearCookie('isLogged')
+  res.clearCookie('id')
   res.status(200).json({message:"logged out"})
 }
 

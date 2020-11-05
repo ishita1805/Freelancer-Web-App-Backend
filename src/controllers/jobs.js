@@ -49,6 +49,7 @@ exports.applyJob = (req, res, next) => {
 exports.getJobs = (req, res, next) => {
     Job.find()
       .populate('applicants')
+      .populate('hired')
       .then((data) => res.status(201).json({
           jobs:data
         }))
@@ -62,7 +63,9 @@ exports.getJobs = (req, res, next) => {
 // search for one job
 exports.getOneJob = (req, res, next) => {
     Job.findOne({_id:req.body.jobId})
+      .populate('applicantsHired')
       .populate('applicants')
+      .exec()
       .then((data) => res.status(201).json({
           jobs:data
         }))
@@ -77,6 +80,7 @@ exports.getOneJob = (req, res, next) => {
 exports.deleteJob = (req, res, next) => {
   Job.findByIdAndUpdate(req.body.jobId,{ $set: { status : "removed" } })
   .then((data) => {
+    Job.find()
       res.status(200).json({
           message:"Job deleted",
           data:data
@@ -149,15 +153,33 @@ exports.hireJob = (req, res, next) => {
 // find jobs by owner
 exports.ownerJobs = (req, res, next) => {
   Job.find({owner:req.body.owner})
+  .populate('applicants')
   .then((data)=>{
     res.status(201).json({
       message:"List of jobs under owner found",
       jobs: data
     })
-    .catch(()=>{
-      res.status(500).json({
-        error:"Could not fetch list"
-      })
+  })
+  .catch(()=>{
+    res.status(500).json({
+      error:"Could not fetch list"
     })
   })
 }
+
+
+// find one job and  all it's applicants
+exports.oneJob = (req, res, next) => {
+  Job.findOne({_id:req.body.jobId})
+  .populate('applicants')
+  .then((response)=>{
+    res.status(201).json({
+      data:response
+    })
+  })
+  .catch((e)=>{
+    console.log(e)
+  })
+}
+
+// find hired applicants for a job
